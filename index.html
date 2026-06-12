@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Nuestro Universo 🌙</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&family=Dancing+Script:wght@400;600&family=Nunito:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f1a;--deep:#13162a;--nebula:#1e2240;--card:#181b2e;
+  --accent1:#c9a84c;--accent1s:#e8c97a;--accent2:#c4788a;--accent2s:#e8a0b0;
+  --star:#f5f0e8;--muted:#7a7f9a;
+  --font-display:'Cormorant Garamond',serif;--font-body:'Inter',sans-serif;
+  --radius-card:20px;--stars-opacity:1;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--star);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;padding-bottom:90px;transition:background .4s,color .4s}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:var(--stars-opacity);transition:opacity .4s;
+  background:radial-gradient(1px 1px at 8% 15%,rgba(255,255,255,.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 22% 65%,rgba(255,255,255,.35) 0%,transparent 100%),
+  radial-gradient(1px 1px at 38% 8%,rgba(255,255,255,.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 52% 82%,rgba(255,255,255,.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 68% 30%,rgba(255,255,255,.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 83% 72%,rgba(255,255,255,.55) 0%,transparent 100%),
+  radial-gradient(1px 1px at 12% 88%,rgba(255,255,255,.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 91% 12%,rgba(255,255,255,.45) 0%,transparent 100%),
+  radial-gradient(2px 2px at 75% 20%,rgba(201,168,76,.25) 0%,transparent 100%),
+  radial-gradient(2px 2px at 30% 75%,rgba(196,120,138,.2) 0%,transparent 100%)}
+
+/* ══ LOGIN SCREEN ══ */
+#loginScreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.login-moon{font-size:64px;margin-bottom:16px;animation:floatMoon 4s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}
+@keyframes floatMoon{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.login-title{font-family:var(--font-display);font-size:clamp(36px,10vw,58px);font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,var(--accent1s),var(--star),var(--accent2s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.login-sub{font-size:13px;color:var(--muted);letter-spacing:.1em;margin-bottom:6px}
+.login-verse{font-family:var(--font-display);font-style:italic;font-size:13px;color:var(--accent1);opacity:.75;max-width:280px;margin:0 auto 40px}
+.google-btn{display:flex;align-items:center;gap:12px;background:white;color:#1a1a2e;border:none;border-radius:100px;padding:14px 28px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.google-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.google-btn img{width:22px;height:22px}
+.login-note{font-size:11px;color:var(--muted);margin-top:20px;opacity:.7}
+.login-error{color:#ff6b6b;font-size:13px;margin-top:16px;display:none}
+.login-loading{color:var(--accent1s);font-size:13px;margin-top:16px;display:none}
+
+/* ══ APP (hidden until logged in) ══ */
+#appRoot{display:none}
+
+/* ══ PAGES ══ */
+.page{display:none;position:relative;z-index:1}
+.page.active{display:block}
+
+/* HOME */
+.hero{display:flex;flex-direction:column;align-items:center;padding:60px 24px 32px;text-align:center}
+.couple-names{font-family:var(--font-display);font-size:14px;font-weight:300;letter-spacing:.35em;color:var(--accent1);text-transform:uppercase;margin-bottom:14px;opacity:.85}
+.couple-names span{color:var(--accent2s)}
+.moon-icon{font-size:54px;margin-bottom:12px;filter:drop-shadow(0 0 18px rgba(201,168,76,.5));animation:floatMoon 4s ease-in-out infinite}
+.app-title{font-family:var(--font-display);font-size:clamp(36px,10vw,62px);font-weight:300;font-style:italic;line-height:1.1;margin-bottom:8px;
+  background:linear-gradient(135deg,var(--accent1s),var(--star),var(--accent2s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.app-subtitle{font-size:13px;color:var(--muted);letter-spacing:.1em;margin-bottom:6px}
+.hero-verse{font-family:var(--font-display);font-style:italic;font-size:13px;color:var(--accent1);opacity:.75;max-width:280px;margin-top:6px}
+.counters-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center}
+.counter-pill{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:100px;padding:10px 22px;display:inline-flex;align-items:center;gap:10px}
+.counter-pill .days{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--accent1s);line-height:1}
+.counter-pill .label{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:left;line-height:1.5}
+.counter-pill.rose{background:rgba(196,120,138,.08);border-color:rgba(196,120,138,.25)}
+.counter-pill.rose .days{color:var(--accent2s)}
+.mood-section{padding:8px 20px 4px;text-align:center}
+.mood-label{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.mood-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.mood-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:7px 14px;font-size:12px;color:var(--star);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;font-family:var(--font-body)}
+.mood-btn:hover,.mood-btn.active{background:rgba(201,168,76,.15);border-color:var(--accent1);color:var(--accent1s)}
+.devo-strip{margin:20px auto 0;max-width:480px;padding:0 16px}
+.devo-strip-inner{background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(196,120,138,.08));border:1px solid rgba(201,168,76,.2);border-radius:18px;padding:18px 20px;display:flex;gap:14px;align-items:center;cursor:pointer}
+.devo-cross{font-size:26px;flex-shrink:0}
+.devo-eyebrow{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent1);opacity:.8;margin-bottom:4px}
+.devo-verse-short{font-family:var(--font-display);font-style:italic;font-size:13px;color:var(--star);line-height:1.5}
+.devo-ref-short{font-size:10px;color:var(--muted);margin-top:3px}
+.home-grid{padding:24px 16px 0;max-width:480px;margin:0 auto}
+.section-eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;text-align:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius-card);padding:20px 16px;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.grid-card::before{content:'';position:absolute;inset:0;background:var(--glow,transparent);opacity:0;transition:opacity .3s;border-radius:var(--radius-card)}
+.grid-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.15)}
+.grid-card:hover::before{opacity:1}
+.grid-card.gold{--glow:radial-gradient(circle at 30% 30%,rgba(201,168,76,.13),transparent 70%)}
+.grid-card.rose{--glow:radial-gradient(circle at 30% 30%,rgba(196,120,138,.13),transparent 70%)}
+.grid-card.blue{--glow:radial-gradient(circle at 30% 30%,rgba(100,140,220,.13),transparent 70%)}
+.grid-card.green{--glow:radial-gradient(circle at 30% 30%,rgba(100,180,140,.13),transparent 70%)}
+.card-icon{font-size:24px;line-height:1}
+.card-title{font-family:var(--font-display);font-size:17px;font-weight:400;color:var(--star);line-height:1.2}
+.card-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* USER BADGE */
+.user-badge{position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:8px;z-index:5}
+.user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid rgba(201,168,76,.4);object-fit:cover}
+.user-avatar-placeholder{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid rgba(201,168,76,.4)}
+.signout-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:5px 12px;color:var(--muted);font-size:10px;cursor:pointer;font-family:var(--font-body);transition:all .2s}
+.signout-btn:hover{border-color:rgba(255,100,100,.4);color:rgba(255,100,100,.8)}
+
+/* SYNC INDICATOR */
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#4caf50;display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-bar{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(13,15,26,.9);backdrop-filter:blur(10px);padding:6px 16px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);gap:6px;transform:translateY(-100%);transition:transform .3s}
+.sync-bar.show{transform:translateY(0)}
+
+/* CALENDAR */
+.cal-header{padding:48px 20px 16px;text-align:center;position:relative}
+.page-title{font-family:var(--font-display);font-size:30px;font-style:italic;font-weight:300;
+  background:linear-gradient(135deg,var(--accent1s),var(--star),var(--accent2s));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent1);opacity:.8;margin-bottom:6px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px 6px;max-width:480px;margin:0 auto}
+.month-nav button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:50%;width:36px;height:36px;color:var(--star);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.month-nav button:hover{background:rgba(201,168,76,.15);border-color:var(--accent1)}
+.month-label{font-family:var(--font-display);font-size:22px;font-style:italic;font-weight:300;text-align:center}
+.month-label span{display:block;font-family:var(--font-body);font-size:11px;font-style:normal;color:var(--muted);letter-spacing:.1em;margin-top:2px}
+.cal-wrap{max-width:480px;margin:0 auto;padding:0 14px}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+.weekday{text-align:center;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 0}
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.day-cell{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .18s;background:rgba(255,255,255,.02);border:1px solid transparent;font-size:12px;color:var(--star);gap:2px}
+.day-cell:hover{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.3)}
+.day-cell.empty{cursor:default;background:transparent;border-color:transparent}
+.day-cell.today{background:rgba(201,168,76,.15);border-color:var(--accent1);color:var(--accent1s);font-weight:500}
+.day-cell.has-mem{background:rgba(196,120,138,.12);border-color:rgba(196,120,138,.35)}
+.day-cell.has-mem .dnum{color:var(--accent2s)}
+.dnum{font-size:12px;line-height:1}
+.dot-row{display:flex;gap:2px}
+.dot{width:4px;height:4px;border-radius:50%}
+.dot.p{background:var(--accent1)}.dot.n{background:var(--accent2s)}.dot.l{background:#7eb8d4}
+.legend{display:flex;justify-content:center;gap:14px;padding:10px 0 6px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
+.legend-dot{width:6px;height:6px;border-radius:50%}
+.memories-list{max-width:480px;margin:16px auto 0;padding:0 14px}
+.list-title{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.mem-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all .2s}
+.mem-card:hover{border-color:rgba(201,168,76,.3);transform:translateX(3px)}
+.mem-date{text-align:center;flex-shrink:0;width:34px}
+.mem-day{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--accent1s);line-height:1}
+.mem-mon{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.mem-info{flex:1;min-width:0}
+.mem-title{font-size:13px;color:var(--star);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mem-meta{font-size:10px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+.mem-thumb{width:42px;height:42px;border-radius:9px;flex-shrink:0;background:var(--nebula);display:flex;align-items:center;justify-content:center;font-size:16px;overflow:hidden}
+.mem-thumb img{width:100%;height:100%;object-fit:cover}
+.empty-state{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;line-height:1.7}
+.empty-state .ee{font-size:30px;display:block;margin-bottom:8px}
+
+/* DEVOTIONAL */
+.devo-page{padding:48px 20px 20px;max-width:480px;margin:0 auto}
+.devo-header{text-align:center;margin-bottom:24px}
+.devo-full-card{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(196,120,138,.06));border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:28px 24px;margin-bottom:16px}
+.devo-day-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent1);opacity:.8;margin-bottom:12px}
+.devo-main-verse{font-family:var(--font-display);font-style:italic;font-size:20px;color:var(--star);line-height:1.6;margin-bottom:12px}
+.devo-main-ref{font-size:12px;color:var(--accent1);margin-bottom:16px}
+.devo-reflection{font-size:13px;color:var(--muted);line-height:1.8}
+.devo-prayer{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px;margin-bottom:16px}
+.devo-prayer-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px}
+.devo-prayer-text{font-family:var(--font-display);font-style:italic;font-size:15px;color:var(--star);line-height:1.7}
+.devo-nav-row{display:flex;gap:10px}
+.devo-nav-btn{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all .2s;text-align:center}
+.devo-nav-btn:hover{border-color:var(--accent1);color:var(--accent1s)}
+
+/* GAMES */
+.games-page{padding:48px 20px 20px;max-width:480px;margin:0 auto}
+.game-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:32px 24px;text-align:center;margin-bottom:16px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.game-category{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent1);opacity:.8}
+.game-question{font-family:var(--font-display);font-style:italic;font-size:22px;color:var(--star);line-height:1.5}
+.game-btn{background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;border-radius:100px;padding:14px 32px;color:var(--bg);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.game-btn:hover{opacity:.88}
+.game-cats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.cat-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--font-body);transition:all .2s;text-align:center}
+.cat-btn:hover,.cat-btn.active{background:rgba(201,168,76,.12);border-color:var(--accent1);color:var(--accent1s)}
+.game-counter{font-size:11px;color:var(--muted)}
+
+/* SETTINGS */
+.settings-page{padding:48px 20px 20px;max-width:480px;margin:0 auto}
+.settings-section{margin-bottom:28px}
+.settings-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.settings-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:20px}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.theme-swatch{border-radius:14px;padding:14px 10px;cursor:pointer;border:2px solid transparent;text-align:center;transition:all .2s;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.theme-swatch.active{border-color:white}
+.theme-swatch .sw-preview{width:32px;height:32px;border-radius:50%;margin-bottom:2px}
+.theme-swatch span{color:var(--star);font-size:10px}
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.font-btn{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;text-align:center}
+.font-btn:hover,.font-btn.active{border-color:var(--accent1);background:rgba(201,168,76,.1)}
+.font-btn .fb-name{font-size:16px;color:var(--star);display:block;margin-bottom:2px}
+.font-btn .fb-label{font-size:10px;color:var(--muted)}
+.color-row{display:flex;flex-direction:column;gap:10px}
+.color-item{display:flex;align-items:center;justify-content:space-between}
+.color-item label{font-size:12px;color:var(--muted)}
+.color-item input[type=color]{width:44px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:none;cursor:pointer;padding:2px}
+.profile-field{margin-bottom:14px}
+.profile-field label{display:block;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.profile-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:11px 14px;color:var(--star);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s}
+.profile-input:focus{border-color:rgba(201,168,76,.5)}
+.save-settings-btn{width:100%;background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;border-radius:14px;padding:14px;color:var(--bg);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s;margin-top:6px}
+.save-settings-btn:hover{opacity:.9}
+.radius-row{display:flex;gap:8px;flex-wrap:wrap}
+.radius-btn{flex:1;min-width:70px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--font-body);text-align:center;transition:all .2s}
+.radius-btn:hover,.radius-btn.active{border-color:var(--accent1);color:var(--accent1s);background:rgba(201,168,76,.1)}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(13,15,26,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;align-items:center;padding:10px 0 18px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--muted);font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;padding:4px 10px;font-family:var(--font-body);transition:color .2s}
+.nav-item .ni{font-size:20px}
+.nav-item.active{color:var(--accent1s)}
+.nav-center{background:linear-gradient(135deg,var(--accent1),var(--accent2));border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-top:-14px;cursor:pointer;box-shadow:0 4px 20px rgba(201,168,76,.4);border:none;transition:transform .2s}
+.nav-center:hover{transform:scale(1.07)}
+
+/* MODAL SHEET */
+.overlay{display:none;position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.sheet{background:var(--deep);border:1px solid rgba(255,255,255,.08);border-radius:28px 28px 0 0;padding:0 0 40px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;background:rgba(255,255,255,.12);border-radius:100px;margin:14px auto 0}
+.sheet-header{padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.sheet-date{font-family:var(--font-display);font-size:22px;font-style:italic;color:var(--accent1s)}
+.sheet-close{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:50%;width:30px;height:30px;color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font-body)}
+.sheet-body{padding:18px 22px;display:flex;flex-direction:column;gap:16px}
+.field-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.field-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:11px 13px;color:var(--star);font-family:var(--font-body);font-size:13px;outline:none;transition:border-color .2s;resize:none}
+.field-input:focus{border-color:rgba(201,168,76,.5)}
+.field-input::placeholder{color:var(--muted)}
+.location-row{display:flex;gap:8px}
+.location-row .field-input{flex:1}
+.loc-btn{background:rgba(126,184,212,.12);border:1px solid rgba(126,184,212,.3);border-radius:12px;padding:0 14px;color:#7eb8d4;font-size:18px;cursor:pointer;display:flex;align-items:center;transition:all .2s}
+.loc-btn:hover{background:rgba(126,184,212,.22)}
+.map-preview{width:100%;height:130px;border-radius:12px;background:var(--nebula);border:1px solid rgba(126,184,212,.2);display:none;overflow:hidden}
+.map-preview iframe{width:100%;height:100%;border:none}
+.map-preview.visible{display:block}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.photo-thumb{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;cursor:pointer}
+.del-photo{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);border:none;border-radius:50%;width:20px;height:20px;color:white;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.add-photo-btn{aspect-ratio:1;border-radius:10px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:10px;gap:4px;transition:all .2s}
+.add-photo-btn:hover{border-color:var(--accent1);color:var(--accent1)}
+.save-btn{width:100%;background:linear-gradient(135deg,var(--accent1),var(--accent2));border:none;border-radius:14px;padding:14px;color:var(--bg);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.save-btn:hover{opacity:.9}
+.delete-btn{width:100%;background:transparent;border:1px solid rgba(255,80,80,.3);border-radius:14px;padding:11px;color:rgba(255,100,100,.7);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .2s}
+.delete-btn:hover{border-color:rgba(255,80,80,.6);color:rgba(255,110,110,1)}
+#photoInput{display:none}
+
+/* PHOTO VIEWER */
+.pv-overlay{display:none;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.96);align-items:center;justify-content:center}
+.pv-overlay.open{display:flex}
+.pv-overlay img{max-width:95vw;max-height:85vh;border-radius:10px;object-fit:contain}
+.pv-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:38px;height:38px;color:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* TOAST */
+.toast{position:fixed;top:22px;left:50%;transform:translateX(-50%);background:var(--nebula);border:1px solid rgba(201,168,76,.4);border-radius:100px;padding:9px 22px;font-size:12px;color:var(--accent1s);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+
+/* SAVING INDICATOR */
+.saving-ring{display:inline-block;width:12px;height:12px;border:2px solid rgba(201,168,76,.3);border-top-color:var(--accent1);border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="sync-bar" id="syncBar"><span class="sync-dot"></span><span id="syncMsg">Sincronizando…</span></div>
+<div class="pv-overlay" id="pvOverlay"><button class="pv-close" onclick="closePV()">✕</button><img id="pvImg" src="" alt=""></div>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen">
+  <div class="login-moon">🌙</div>
+  <h1 class="login-title">Nuestro Universo</h1>
+  <p class="login-sub">Un lugar solo para los dos</p>
+  <p class="login-verse">"El que halló esposa halló algo bueno…" — Proverbios 18:22</p>
+  <button class="google-btn" onclick="signInWithGoogle()">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+    Entrar con Google
+  </button>
+  <div class="login-note">Solo Alfredi y Katherine pueden acceder 🔒</div>
+  <div class="login-error" id="loginError">⚠️ Este correo no tiene acceso. Solo pueden entrar Alfredi y Katherine.</div>
+  <div class="login-loading" id="loginLoading"><span class="saving-ring"></span>Iniciando sesión…</div>
+</div>
+
+<!-- ══ APP ROOT ══ -->
+<div id="appRoot">
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero" style="position:relative">
+    <div class="user-badge" id="userBadge"></div>
+    <div class="couple-names" id="heroNames">Alfredi &amp; <span>Katherine</span></div>
+    <div class="moon-icon">🌙</div>
+    <h1 class="app-title">Nuestro Universo</h1>
+    <p class="app-subtitle">Un lugar solo para los dos</p>
+    <p class="hero-verse">"El que halló esposa halló algo bueno…" — Proverbios 18:22</p>
+    <div class="counters-row">
+      <div class="counter-pill"><span class="days" id="daysTalking">—</span><div class="label">días<br>hablando 💬</div></div>
+      <div class="counter-pill rose"><span class="days" id="daysTogether">—</span><div class="label">días de<br>novios ❤️</div></div>
+    </div>
+  </div>
+  <div class="mood-section">
+    <p class="mood-label">¿Cómo te sientes hoy?</p>
+    <div class="mood-row">
+      <button class="mood-btn" onclick="setMood(this,'🥰 Enamorado/a')">🥰 Enamorado/a</button>
+      <button class="mood-btn" onclick="setMood(this,'😊 Feliz')">😊 Feliz</button>
+      <button class="mood-btn" onclick="setMood(this,'🙏 Agradecido/a')">🙏 Agradecido/a</button>
+      <button class="mood-btn" onclick="setMood(this,'😔 Extrañándote')">😔 Extrañándote</button>
+      <button class="mood-btn" onclick="setMood(this,'✨ Bendecido/a')">✨ Bendecido/a</button>
+    </div>
+  </div>
+  <div class="devo-strip">
+    <div class="devo-strip-inner" onclick="goTo('devo')">
+      <div class="devo-cross">✝️</div>
+      <div>
+        <div class="devo-eyebrow">Devocional de hoy</div>
+        <div class="devo-verse-short" id="homeVerseShort">"El amor es sufrido, es benigno…"</div>
+        <div class="devo-ref-short">Toca para leer más</div>
+      </div>
+    </div>
+  </div>
+  <div class="home-grid">
+    <p class="section-eyebrow">Nuestros espacios</p>
+    <div class="grid">
+      <div class="grid-card gold" onclick="goTo('cal')"><div class="card-icon">📅</div><div class="card-title">Calendario</div><div class="card-desc">Fechas, fotos y lugares especiales</div></div>
+      <div class="grid-card rose" onclick="goTo('games')"><div class="card-icon">🎮</div><div class="card-title">Juegos</div><div class="card-desc">Preguntas para conocernos más</div></div>
+      <div class="grid-card blue" onclick="goTo('devo')"><div class="card-icon">✝️</div><div class="card-title">Devocionales</div><div class="card-desc">Fe y amor para cada día</div></div>
+      <div class="grid-card green" onclick="goTo('settings')"><div class="card-icon">🎨</div><div class="card-title">Personalizar</div><div class="card-desc">Colores, fuentes y diseño</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div class="page" id="page-cal">
+  <div class="cal-header">
+    <div class="page-eyebrow">Alfredi &amp; Katherine</div>
+    <h2 class="page-title">Nuestro Calendario 🌙</h2>
+  </div>
+  <div class="month-nav">
+    <button onclick="changeMonth(-1)">‹</button>
+    <div class="month-label"><span id="monthName">Junio</span><span id="yearName">2026</span></div>
+    <button onclick="changeMonth(1)">›</button>
+  </div>
+  <div class="cal-wrap">
+    <div class="weekdays"><div class="weekday">Dom</div><div class="weekday">Lun</div><div class="weekday">Mar</div><div class="weekday">Mié</div><div class="weekday">Jue</div><div class="weekday">Vie</div><div class="weekday">Sáb</div></div>
+    <div class="days-grid" id="daysGrid"></div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent1)"></div>Foto</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent2s)"></div>Nota</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7eb8d4"></div>Lugar</div>
+  </div>
+  <div class="memories-list"><div class="list-title">Memorias guardadas</div><div id="memList"></div></div>
+</div>
+
+<!-- DEVOTIONAL -->
+<div class="page" id="page-devo">
+  <div class="devo-page">
+    <div class="devo-header"><div class="page-eyebrow">Devocional</div><h2 class="page-title">Fe &amp; Amor ✝️</h2></div>
+    <div class="devo-full-card">
+      <div class="devo-day-label" id="devoDay">Día 1</div>
+      <div class="devo-main-verse" id="devoVerse"></div>
+      <div class="devo-main-ref" id="devoRef"></div>
+      <div class="devo-reflection" id="devoReflection"></div>
+    </div>
+    <div class="devo-prayer"><div class="devo-prayer-label">🙏 Oración de hoy</div><div class="devo-prayer-text" id="devoPrayer"></div></div>
+    <div class="devo-nav-row">
+      <button class="devo-nav-btn" onclick="changeDevo(-1)">← Anterior</button>
+      <button class="devo-nav-btn" onclick="changeDevo(1)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div class="page" id="page-games">
+  <div class="games-page">
+    <div style="text-align:center;margin-bottom:20px"><div class="page-eyebrow">Para los dos</div><h2 class="page-title">Juegos de Pareja 🎮</h2></div>
+    <div class="game-cats">
+      <button class="cat-btn active" onclick="setCat(this,'conocernos')">🌟 Conocernos</button>
+      <button class="cat-btn" onclick="setCat(this,'fe')">✝️ Fe y valores</button>
+      <button class="cat-btn" onclick="setCat(this,'suenos')">🌙 Sueños</button>
+      <button class="cat-btn" onclick="setCat(this,'amor')">❤️ Amor</button>
+    </div>
+    <div class="game-card">
+      <div class="game-category" id="gameCategory">Conocernos</div>
+      <div class="game-question" id="gameQuestion">"¿Cuál es el momento más feliz de tu vida hasta ahora?"</div>
+      <div class="game-counter" id="gameCounter">Pregunta 1</div>
+    </div>
+    <button class="game-btn" onclick="nextQuestion()">✨ Siguiente pregunta</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="settings-page">
+    <div style="text-align:center;margin-bottom:24px"><div class="page-eyebrow">Su espacio</div><h2 class="page-title">Personalizar 🎨</h2></div>
+    <div class="settings-section">
+      <div class="settings-label">👫 Sus nombres y fechas</div>
+      <div class="settings-card">
+        <div class="profile-field"><label>Nombre de él</label><input class="profile-input" id="setName1" placeholder="Alfredi"></div>
+        <div class="profile-field"><label>Nombre de ella</label><input class="profile-input" id="setName2" placeholder="Katherine"></div>
+        <div class="profile-field"><label>📅 Cuando empezaron a hablar</label><input class="profile-input" id="setDate1" type="date"></div>
+        <div class="profile-field"><label>❤️ Fecha de noviazgo</label><input class="profile-input" id="setDate2" type="date"></div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label">🌈 Tema de colores</div>
+      <div class="settings-card">
+        <div class="theme-grid">
+          <div class="theme-swatch active" style="background:rgba(201,168,76,.1)" onclick="applyTheme('stars',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#c9a84c,#c4788a)"></div><span>Estrellado</span></div>
+          <div class="theme-swatch" style="background:rgba(100,140,220,.1)" onclick="applyTheme('ocean',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#4a8fc4,#7eb8d4)"></div><span>Océano</span></div>
+          <div class="theme-swatch" style="background:rgba(140,100,200,.1)" onclick="applyTheme('galaxy',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#8c64c8,#c478b4)"></div><span>Galaxia</span></div>
+          <div class="theme-swatch" style="background:rgba(100,180,140,.1)" onclick="applyTheme('eden',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#64b48c,#a8d878)"></div><span>Edén</span></div>
+          <div class="theme-swatch" style="background:rgba(220,140,100,.1)" onclick="applyTheme('sunset',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#dc8c64,#e8c87a)"></div><span>Atardecer</span></div>
+          <div class="theme-swatch" style="background:rgba(200,100,120,.1)" onclick="applyTheme('rose',this)"><div class="sw-preview" style="background:linear-gradient(135deg,#c86478,#e8a0b0)"></div><span>Rosa</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label">💡 Modo de pantalla</div>
+      <div class="settings-card"><div class="radius-row"><button class="radius-btn active" onclick="setMode('dark',this)">🌙 Oscuro</button><button class="radius-btn" onclick="setMode('light',this)">☀️ Claro</button></div></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label">🔤 Fuente de letras</div>
+      <div class="settings-card">
+        <div class="font-grid">
+          <div class="font-btn active" onclick="applyFont('cormorant',this)"><span class="fb-name" style="font-family:'Cormorant Garamond',serif;font-style:italic">Clásica</span><span class="fb-label">Cormorant</span></div>
+          <div class="font-btn" onclick="applyFont('playfair',this)"><span class="fb-name" style="font-family:'Playfair Display',serif">Elegante</span><span class="fb-label">Playfair</span></div>
+          <div class="font-btn" onclick="applyFont('dancing',this)"><span class="fb-name" style="font-family:'Dancing Script',cursive">Romántica</span><span class="fb-label">Dancing Script</span></div>
+          <div class="font-btn" onclick="applyFont('nunito',this)"><span class="fb-name" style="font-family:'Nunito',sans-serif">Moderna</span><span class="fb-label">Nunito</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label">⬜ Forma de las tarjetas</div>
+      <div class="settings-card"><div class="radius-row">
+        <button class="radius-btn" onclick="setRadius('4px',this)">Cuadradas</button>
+        <button class="radius-btn" onclick="setRadius('12px',this)">Suaves</button>
+        <button class="radius-btn active" onclick="setRadius('20px',this)">Redondeadas</button>
+        <button class="radius-btn" onclick="setRadius('28px',this)">Muy redondas</button>
+      </div></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-label">🎨 Colores personalizados</div>
+      <div class="settings-card"><div class="color-row">
+        <div class="color-item"><label>Color principal</label><input type="color" value="#c9a84c" onchange="setCustomColor('--accent1',this.value)"></div>
+        <div class="color-item"><label>Color secundario</label><input type="color" value="#c4788a" onchange="setCustomColor('--accent2',this.value)"></div>
+        <div class="color-item"><label>Fondo</label><input type="color" value="#0d0f1a" onchange="setCustomColor('--bg',this.value)"></div>
+      </div></div>
+    </div>
+    <button class="save-settings-btn" onclick="saveSettings()">Guardar cambios ✨</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-item active" id="nav-home" onclick="goTo('home')"><span class="ni">🌙</span>Inicio</button>
+  <button class="nav-item" id="nav-cal" onclick="goTo('cal')"><span class="ni">📅</span>Calendario</button>
+  <button class="nav-center" onclick="openDayModal(todayKey())">📸</button>
+  <button class="nav-item" id="nav-devo" onclick="goTo('devo')"><span class="ni">✝️</span>Fe</button>
+  <button class="nav-item" id="nav-settings" onclick="goTo('settings')"><span class="ni">🎨</span>Estilo</button>
+</nav>
+
+</div><!-- end appRoot -->
+
+<!-- DAY MODAL -->
+<div class="overlay" id="overlay" onclick="handleOvClick(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-date" id="sheetDate">30 de Mayo</div>
+      <button class="sheet-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div><div class="field-label">✨ Título del recuerdo</div><input class="field-input" id="fTitle" type="text" placeholder="Ej: Nuestra primera salida…" maxlength="60"></div>
+      <div><div class="field-label">📝 Lo que vivimos</div><textarea class="field-input" id="fNotes" rows="4" placeholder="Cuéntalo como si lo fueran a leer de viejitos…"></textarea></div>
+      <div>
+        <div class="field-label">📍 Lugar</div>
+        <div class="location-row"><input class="field-input" id="fLocation" type="text" placeholder="Nombre del lugar…"><button class="loc-btn" onclick="openMap()">🗺️</button></div>
+        <div class="map-preview" id="mapPreview"><iframe id="mapIframe" src="" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+      <div>
+        <div class="field-label">📸 Fotos del momento</div>
+        <div class="photo-grid" id="photoGrid"></div>
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(event)">
+      </div>
+      <button class="save-btn" onclick="saveMemory()">Guardar recuerdo ❤️</button>
+      <button class="delete-btn" id="deleteBtn" style="display:none" onclick="deleteMemory()">Eliminar este recuerdo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FIREBASE + APP SCRIPT ══ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── FIREBASE CONFIG ──
+const firebaseConfig = {
+  apiKey: "AIzaSyA-LzzqtrjpXMGOiaer9EXhZdkUC-P12Og",
+  authDomain: "nuestro-universo-b72cd.firebaseapp.com",
+  projectId: "nuestro-universo-b72cd",
+  storageBucket: "nuestro-universo-b72cd.firebasestorage.app",
+  messagingSenderId: "189759713087",
+  appId: "1:189759713087:web:0639d9d52c6585c17a2d8a"
+};
+
+// ── ALLOWED EMAILS ──
+const ALLOWED = ["alfredifabian@gmail.com","kath.rodriguezalcantara@gmail.com"];
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ── AUTH ──
+window.signInWithGoogle = async () => {
+  document.getElementById('loginError').style.display='none';
+  document.getElementById('loginLoading').style.display='block';
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const email = result.user.email;
+    if (!ALLOWED.includes(email)) {
+      await signOut(auth);
+      document.getElementById('loginLoading').style.display='none';
+      document.getElementById('loginError').style.display='block';
+    }
+  } catch(e) {
+    document.getElementById('loginLoading').style.display='none';
+    if (e.code !== 'auth/popup-closed-by-user') toast('Error al iniciar sesión');
+  }
+};
+
+window.doSignOut = async () => {
+  if (confirm('¿Cerrar sesión?')) { await signOut(auth); }
+};
+
+onAuthStateChanged(auth, user => {
+  if (user && ALLOWED.includes(user.email)) {
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appRoot').style.display='block';
+    showUserBadge(user);
+    loadFromFirestore();
+    listenMemories();
+    loadSettings();
+  } else {
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('appRoot').style.display='none';
+    document.getElementById('loginLoading').style.display='none';
+  }
+});
+
+function showUserBadge(user) {
+  const badge = document.getElementById('userBadge');
+  const avatar = user.photoURL
+    ? `<img class="user-avatar" src="${user.photoURL}" alt="">`
+    : `<div class="user-avatar-placeholder">👤</div>`;
+  badge.innerHTML = `${avatar}<button class="signout-btn" onclick="doSignOut()">Salir</button>`;
+}
+
+// ── FIRESTORE: MEMORIES ──
+function listenMemories() {
+  const colRef = collection(db, 'memories');
+  onSnapshot(colRef, snapshot => {
+    memories = {};
+    snapshot.forEach(d => { memories[d.id] = d.data(); });
+    renderCalendar();
+    renderMemList();
+    showSync('¡Sincronizado! ✨');
+  });
+}
+
+window.saveMemoryToCloud = async (key, data) => {
+  showSync('Guardando…');
+  await setDoc(doc(db, 'memories', key), { ...data, updatedAt: serverTimestamp() });
+};
+
+window.deleteMemoryFromCloud = async (key) => {
+  showSync('Eliminando…');
+  await deleteDoc(doc(db, 'memories', key));
+};
+
+// ── FIRESTORE: SETTINGS ──
+async function loadSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'settings'));
+    if (snap.exists()) {
+      const s = snap.data();
+      Object.assign(settings, s);
+      applyTheme(settings.theme);
+      applyFont(settings.font);
+      setRadius(settings.radius);
+      updateCounters();
+      if (settings.mode==='light') setMode('light');
+    }
+  } catch(e) { console.log('Settings load error', e); }
+}
+
+window.saveSettingsToCloud = async () => {
+  await setDoc(doc(db, 'config', 'settings'), settings);
+};
+
+function loadFromFirestore() { updateCounters(); renderDevo(); showQuestion(); }
+
+function showSync(msg) {
+  const bar = document.getElementById('syncBar');
+  document.getElementById('syncMsg').textContent = msg;
+  bar.classList.add('show');
+  setTimeout(()=>bar.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════════════════════
+// APP LOGIC (same window scope via globalThis)
+// ══════════════════════════════════════════════════
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+let memories={}, currentYear, currentMonth, activeKey=null, currentPhotos=[];
+let currentCat='conocernos', qIndex={};
+let settings={ name1:'Alfredi', name2:'Katherine', date1:'2024-09-17', date2:'2025-06-12', theme:'stars', font:'cormorant', radius:'20px', mode:'dark' };
+
+// NAV
+window.goTo = (page) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const n=document.getElementById('nav-'+page); if(n) n.classList.add('active');
+  window.scrollTo(0,0);
+  if(page==='cal') renderCalendar();
+  if(page==='settings') loadSettingsUI();
+};
+
+// COUNTERS
+function daysDiff(d){ if(!d) return '—'; const diff=Math.floor((new Date()-new Date(d+'T00:00:00'))/86400000); return diff>=0?diff:'—'; }
+function updateCounters(){
+  document.getElementById('daysTalking').textContent=daysDiff(settings.date1);
+  document.getElementById('daysTogether').textContent=daysDiff(settings.date2);
+  document.getElementById('heroNames').innerHTML=settings.name1+' &amp; <span>'+settings.name2+'</span>';
+}
+
+// MOOD
+window.setMood=(btn,label)=>{ document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); toast('Estado guardado: '+label); };
+
+// CALENDAR
+function pad(n){return String(n).padStart(2,'0')}
+window.todayKey=()=>{const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
+function dayKey(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`;}
+
+function renderCalendar(){
+  const now=new Date();
+  if(!currentYear){currentYear=now.getFullYear();currentMonth=now.getMonth();}
+  document.getElementById('monthName').textContent=MONTHS[currentMonth];
+  document.getElementById('yearName').textContent=currentYear;
+  const grid=document.getElementById('daysGrid'); grid.innerHTML='';
+  const first=new Date(currentYear,currentMonth,1).getDay();
+  const total=new Date(currentYear,currentMonth+1,0).getDate();
+  const todK=window.todayKey();
+  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='day-cell empty';grid.appendChild(e);}
+  for(let d=1;d<=total;d++){
+    const key=dayKey(currentYear,currentMonth,d);
+    const mem=memories[key];
+    const el=document.createElement('div');
+    el.className='day-cell'+(key===todK?' today':'')+(mem?' has-mem':'');
+    el.onclick=()=>openDayModal(key);
+    el.innerHTML=`<div class="dnum">${d}</div>`;
+    if(mem){let dots='<div class="dot-row">';if(mem.photos&&mem.photos.length)dots+='<div class="dot p"></div>';if(mem.notes)dots+='<div class="dot n"></div>';if(mem.location)dots+='<div class="dot l"></div>';dots+='</div>';el.innerHTML+=dots;}
+    grid.appendChild(el);
+  }
+  renderMemList();
+}
+window.changeMonth=(dir)=>{currentMonth+=dir;if(currentMonth>11){currentMonth=0;currentYear++;}if(currentMonth<0){currentMonth=11;currentYear--;}renderCalendar();};
+
+function renderMemList(){
+  const el=document.getElementById('memList');
+  const keys=Object.keys(memories).sort((a,b)=>b.localeCompare(a));
+  if(!keys.length){el.innerHTML='<div class="empty-state"><span class="ee">🌙</span>Aún no hay recuerdos.<br>Toca cualquier día para empezar.</div>';return;}
+  el.innerHTML=keys.map(k=>{
+    const m=memories[k];const[y,mo,d]=k.split('-');
+    const thumb=m.photos&&m.photos.length?`<div class="mem-thumb"><img src="${m.photos[0]}" alt=""></div>`:`<div class="mem-thumb">${m.location?'📍':'📝'}</div>`;
+    return `<div class="mem-card" onclick="openDayModal('${k}')"><div class="mem-date"><div class="mem-day">${parseInt(d)}</div><div class="mem-mon">${MS[parseInt(mo)-1]}</div></div><div class="mem-info"><div class="mem-title">${m.title||'Sin título'}</div><div class="mem-meta">${m.location?`<span>📍 ${m.location}</span>`:''} ${m.photos&&m.photos.length?`<span>📸 ${m.photos.length} foto(s)</span>`:''}</div></div>${thumb}</div>`;
+  }).join('');
+}
+
+// MODAL
+window.openDayModal=(key)=>{
+  activeKey=key;const[y,mo,d]=key.split('-');
+  document.getElementById('sheetDate').textContent=`${parseInt(d)} de ${MONTHS[parseInt(mo)-1]} ${y}`;
+  const mem=memories[key]||{};
+  document.getElementById('fTitle').value=mem.title||'';
+  document.getElementById('fNotes').value=mem.notes||'';
+  document.getElementById('fLocation').value=mem.location||'';
+  currentPhotos=mem.photos?[...mem.photos]:[];
+  document.getElementById('deleteBtn').style.display=mem.title?'block':'none';
+  document.getElementById('mapPreview').classList.remove('visible');
+  renderPhotoGrid();
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+};
+window.closeModal=()=>{document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';activeKey=null;};
+window.handleOvClick=(e)=>{if(e.target===document.getElementById('overlay'))closeModal();};
+
+window.handlePhotos=(e)=>{
+  Array.from(e.target.files).forEach(file=>{
+    const r=new FileReader();
+    r.onload=ev=>{currentPhotos.push(ev.target.result);renderPhotoGrid();};
+    r.readAsDataURL(file);
+  });
+  e.target.value='';
+};
+function renderPhotoGrid(){
+  const g=document.getElementById('photoGrid');g.innerHTML='';
+  currentPhotos.forEach((src,i)=>{const d=document.createElement('div');d.className='photo-thumb';d.innerHTML=`<img src="${src}" alt="" onclick="openPV('${src}')"><button class="del-photo" onclick="rmPhoto(${i})">✕</button>`;g.appendChild(d);});
+  const add=document.createElement('div');add.className='add-photo-btn';add.innerHTML='<span style="font-size:20px">＋</span><span>Agregar</span>';add.onclick=()=>document.getElementById('photoInput').click();g.appendChild(add);
+}
+window.rmPhoto=(i)=>{currentPhotos.splice(i,1);renderPhotoGrid();};
+window.openPV=(src)=>{document.getElementById('pvImg').src=src;document.getElementById('pvOverlay').classList.add('open');};
+window.closePV=()=>document.getElementById('pvOverlay').classList.remove('open');
+
+window.openMap=()=>{
+  const loc=document.getElementById('fLocation').value.trim();
+  if(!loc){toast('Escribe un lugar primero');return;}
+  const q=encodeURIComponent(loc);
+  window.open(`https://www.google.com/maps/search/?api=1&query=${q}`,'_blank');
+  document.getElementById('mapIframe').src=`https://maps.google.com/maps?q=${q}&output=embed`;
+  document.getElementById('mapPreview').classList.add('visible');
+};
+document.getElementById('fLocation').addEventListener('change',function(){
+  const loc=this.value.trim();
+  if(loc){document.getElementById('mapIframe').src=`https://maps.google.com/maps?q=${encodeURIComponent(loc)}&output=embed`;document.getElementById('mapPreview').classList.add('visible');}
+  else document.getElementById('mapPreview').classList.remove('visible');
+});
+
+window.saveMemory=async()=>{
+  if(!activeKey)return;
+  const title=document.getElementById('fTitle').value.trim();
+  const notes=document.getElementById('fNotes').value.trim();
+  const location=document.getElementById('fLocation').value.trim();
+  if(!title&&!notes&&!location&&!currentPhotos.length){toast('Agrega al menos un detalle ✨');return;}
+  const data={title,notes,location,photos:[...currentPhotos]};
+  memories[activeKey]=data;
+  await window.saveMemoryToCloud(activeKey,data);
+  renderCalendar();closeModal();toast('Recuerdo guardado ❤️');
+};
+window.deleteMemory=async()=>{
+  if(!activeKey||!memories[activeKey])return;
+  if(!confirm('¿Eliminar este recuerdo?'))return;
+  delete memories[activeKey];
+  await window.deleteMemoryFromCloud(activeKey);
+  renderCalendar();closeModal();toast('Recuerdo eliminado');
+};
+
+// DEVOTIONALS
+const devos=[
+  {title:'Amor que es paciente',verse:'"El amor es sufrido, es benigno; el amor no tiene envidia, el amor no es jactancioso, no se envanece."',ref:'1 Corintios 13:4',reflection:'El amor verdadero no exige ni se apresura. Dios nos enseña que amar es una decisión diaria — elegirse el uno al otro con paciencia y bondad, incluso cuando es difícil. Hoy, ¿cómo puedes mostrar paciencia con tu pareja?',prayer:'"Señor, enséñanos a amarnos como Tú nos amas — con paciencia, con gracia y con gozo. Que este amor sea un reflejo de Tu amor. Amén."'},
+  {title:'Dos son mejor que uno',verse:'"Mejores son dos que uno; porque tienen mejor paga de su trabajo. Porque si cayeren, el uno levantará a su compañero."',ref:'Eclesiastés 4:9-10',reflection:'Dios nunca pensó que camináramos solos. En Su sabiduría nos dio compañía, apoyo y amor compartido. Hoy celebra que tienes a alguien que te levanta cuando caes.',prayer:'"Gracias, Señor, por ponernos el uno al otro en el camino. Ayúdanos a ser el apoyo que el otro necesita cada día. Amén."'},
+  {title:'Edificados sobre la roca',verse:'"Cualquiera, pues, que me oye estas palabras y las hace, le compararé a un hombre prudente, que edificó su casa sobre la roca."',ref:'Mateo 7:24',reflection:'Una relación construida sobre Dios puede soportar cualquier tormenta. Cuando la base es Cristo, el amor crece más fuerte con cada prueba. ¿Están construyendo juntos sobre esa roca?',prayer:'"Padre, que nuestra relación esté fundamentada en Ti. Que cada decisión que tomemos juntos te honre. Amén."'},
+  {title:'El amor perfecto',verse:'"En el amor no hay temor, sino que el perfecto amor echa fuera el temor."',ref:'1 Juan 4:18',reflection:'Cuando amamos como Dios ama — sin condiciones — el miedo desaparece. No hay temor al rechazo, al fracaso, ni al futuro. Hoy, ama con libertad y sin reservas.',prayer:'"Señor, llena nuestra relación de Tu amor perfecto. Que no haya lugar para el miedo entre nosotros. Amén."'},
+  {title:'Vestíos de amor',verse:'"Y sobre todas estas cosas vestíos de amor, que es el vínculo perfecto."',ref:'Colosenses 3:14',reflection:'Como nos vestimos cada mañana, el amor es algo que elegimos ponernos a diario. No es solo un sentimiento — es una decisión de cubrirnos el uno al otro con gracia y misericordia.',prayer:'"Dios, ayúdanos a elegir el amor cada día, especialmente en los momentos difíciles. Amén."'},
+  {title:'Honrarse mutuamente',verse:'"Amaos los unos a los otros con amor fraternal; en cuanto a honra, prefiriéndoos los unos a los otros."',ref:'Romanos 12:10',reflection:'Honrar al otro significa ponerlo por encima de uno mismo — en las palabras, en las decisiones, en el trato diario. Hoy, ¿cómo puedes honrar a tu pareja con tus acciones?',prayer:'"Padre, danos corazones humildes para honrarnos mutuamente. Que nuestras palabras siempre edifiquen. Amén."'},
+  {title:'La cuerda de tres dobleces',verse:'"Y si alguno prevaleciere contra uno, dos le resistirán; y cordón de tres dobleces no se rompe pronto."',ref:'Eclesiastés 4:12',reflection:'La mejor relación de pareja es la que tiene a Dios como el tercer hilo. Con Él, son invencibles. Hoy inviten a Dios activamente a su relación.',prayer:'"Señor, sé Tú el centro de nuestra relación. Queremos que seas el tercer hilo que nos une y fortalece. Amén."'},
+];
+let devoIdx=0;
+function renderDevo(){
+  const d=devos[devoIdx%devos.length];
+  document.getElementById('devoDay').textContent=`Día ${devoIdx+1} · ${d.title}`;
+  document.getElementById('devoVerse').textContent=d.verse;
+  document.getElementById('devoRef').textContent=d.ref;
+  document.getElementById('devoReflection').textContent=d.reflection;
+  document.getElementById('devoPrayer').textContent=d.prayer;
+  document.getElementById('homeVerseShort').textContent=d.verse.substring(0,55)+'…';
+}
+window.changeDevo=(dir)=>{devoIdx=Math.max(0,devoIdx+dir);renderDevo();};
+
+// GAMES
+const questions={
+  conocernos:['¿Cuál es el momento más feliz de tu vida hasta ahora?','¿Qué es lo primero que pensaste cuando me viste por primera vez?','¿Cuál es tu mayor sueño en la vida?','¿Qué cualidad mía te enamora más?','¿Cómo te imaginas nuestra vida en 10 años?','¿Cuál es tu recuerdo de infancia favorito?','¿Qué canción describe nuestra historia?','¿Cuál es el momento más especial que hemos vivido juntos?'],
+  fe:['¿Cómo ha cambiado tu fe desde que estamos juntos?','¿Cuál versículo bíblico representa nuestra relación para ti?','¿Cómo quieres que Dios sea el centro de nuestra relación?','¿Qué oración elevarías a Dios por nosotros ahora mismo?','¿En qué área de tu vida sientes que Dios te está haciendo crecer?','¿Qué significa para ti que nuestra relación sea cristiana?'],
+  suenos:['¿En qué país del mundo te gustaría vivir algún día?','¿Cuántos hijos sueñas tener?','¿Cómo sería la casa de tus sueños?','¿Qué lugar del mundo quieres visitar conmigo primero?','¿Cuál es tu sueño profesional más grande?','¿Qué tradición quieres que tengamos como familia?','¿Cómo te imaginas nuestra boda ideal?'],
+  amor:['¿Cómo prefieres que te demuestre mi amor?','¿Qué pequeña cosa que hago te hace sentir muy amado/a?','¿Cuál fue el momento en que supiste que me amabas?','¿Qué es lo que más valoras de nuestra relación?','¿Cómo te gustaría que celebráramos nuestro aniversario?','¿Cuál fue la primera cosa que te enamoró de mí?'],
+};
+window.setCat=(btn,cat)=>{document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentCat=cat;if(!qIndex[cat])qIndex[cat]=0;showQuestion();};
+window.nextQuestion=()=>{if(!qIndex[currentCat])qIndex[currentCat]=0;qIndex[currentCat]=(qIndex[currentCat]+1)%questions[currentCat].length;showQuestion();};
+function showQuestion(){
+  const idx=qIndex[currentCat]||0;const q=questions[currentCat];
+  const cats={conocernos:'🌟 Conocernos',fe:'✝️ Fe y valores',suenos:'🌙 Sueños',amor:'❤️ Amor'};
+  document.getElementById('gameCategory').textContent=cats[currentCat];
+  document.getElementById('gameQuestion').textContent=`"${q[idx]}"`;
+  document.getElementById('gameCounter').textContent=`Pregunta ${idx+1} de ${q.length}`;
+}
+
+// THEMES
+const themes={
+  stars:{accent1:'#c9a84c',accent1s:'#e8c97a',accent2:'#c4788a',accent2s:'#e8a0b0',bg:'#0d0f1a',deep:'#13162a',nebula:'#1e2240',card:'#181b2e'},
+  ocean:{accent1:'#4a8fc4',accent1s:'#7eb8d4',accent2:'#4ac4b4',accent2s:'#7ed4c8',bg:'#0a1520',deep:'#0f1e2e',nebula:'#162840',card:'#121c2e'},
+  galaxy:{accent1:'#8c64c8',accent1s:'#b094e0',accent2:'#c478b4',accent2s:'#e0a0d0',bg:'#100d1a',deep:'#18122a',nebula:'#221a3c',card:'#160f28'},
+  eden:{accent1:'#64b48c',accent1s:'#90d0a8',accent2:'#8ab850',accent2s:'#b0d878',bg:'#0a140e',deep:'#0f1e14',nebula:'#162a1c',card:'#111c14'},
+  sunset:{accent1:'#dc8c64',accent1s:'#edb48a',accent2:'#dcc050',accent2s:'#edd880',bg:'#1a100a',deep:'#2a180e',nebula:'#3c2416',card:'#2a1c10'},
+  rose:{accent1:'#c86478',accent1s:'#e090a0',accent2:'#c878b4',accent2s:'#e0a0d0',bg:'#1a0d12',deep:'#2a121a',nebula:'#3c1a26',card:'#280f1c'},
+};
+const fontMap={cormorant:"'Cormorant Garamond',serif",playfair:"'Playfair Display',serif",dancing:"'Dancing Script',cursive",nunito:"'Nunito',sans-serif"};
+
+window.applyTheme=(name,el)=>{
+  const t=themes[name];if(!t)return;
+  const r=document.documentElement.style;
+  r.setProperty('--accent1',t.accent1);r.setProperty('--accent1s',t.accent1s);
+  r.setProperty('--accent2',t.accent2);r.setProperty('--accent2s',t.accent2s);
+  r.setProperty('--bg',t.bg);r.setProperty('--deep',t.deep);r.setProperty('--nebula',t.nebula);r.setProperty('--card',t.card);
+  document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('active'));
+  if(el)el.classList.add('active');
+  settings.theme=name;
+};
+window.applyFont=(name,el)=>{
+  document.documentElement.style.setProperty('--font-display',fontMap[name]);
+  document.querySelectorAll('.font-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');settings.font=name;
+};
+window.setRadius=(val,el)=>{
+  document.documentElement.style.setProperty('--radius-card',val);
+  document.querySelectorAll('.radius-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');settings.radius=val;
+};
+window.setCustomColor=(prop,val)=>document.documentElement.style.setProperty(prop,val);
+window.setMode=(mode,el)=>{
+  const r=document.documentElement.style;
+  if(mode==='light'){r.setProperty('--bg','#f5f0e8');r.setProperty('--deep','#ede8dc');r.setProperty('--nebula','#e0d8c8');r.setProperty('--card','#ede8dc');r.setProperty('--star','#1a1a2e');r.setProperty('--muted','#6a6a8a');r.setProperty('--stars-opacity','0');}
+  else{const t=themes[settings.theme]||themes.stars;r.setProperty('--bg',t.bg);r.setProperty('--deep',t.deep);r.setProperty('--nebula',t.nebula);r.setProperty('--card',t.card);r.setProperty('--star','#f5f0e8');r.setProperty('--muted','#7a7f9a');r.setProperty('--stars-opacity','1');}
+  document.querySelectorAll('.radius-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');settings.mode=mode;
+};
+
+function loadSettingsUI(){
+  document.getElementById('setName1').value=settings.name1;
+  document.getElementById('setName2').value=settings.name2;
+  document.getElementById('setDate1').value=settings.date1;
+  document.getElementById('setDate2').value=settings.date2;
+}
+window.saveSettings=async()=>{
+  settings.name1=document.getElementById('setName1').value.trim()||'Alfredi';
+  settings.name2=document.getElementById('setName2').value.trim()||'Katherine';
+  settings.date1=document.getElementById('setDate1').value;
+  settings.date2=document.getElementById('setDate2').value;
+  await window.saveSettingsToCloud();
+  updateCounters();toast('¡Cambios guardados en la nube! ✨');
+};
+
+// TOAST
+window.toast=(msg)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);};
+
+// INIT
+renderDevo();showQuestion();
+
+</script>
+</body>
+</html>
